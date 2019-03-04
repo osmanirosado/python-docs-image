@@ -4,7 +4,7 @@ FROM bash:5.0 as builder
 ADD https://docs.python.org/3.6/archives/python-3.6.8-docs-html.zip /home
 
 # Unpack the documentation
-RUN unzip /home/python-3.6.8-docs-html.zip -d /home
+RUN unzip -q /home/python-3.6.8-docs-html.zip -d /home
 
 # Grant read and execute permits to others on python-3.6.8-docs-html directory
 RUN chmod -R o+rx /home/python-3.6.8-docs-html
