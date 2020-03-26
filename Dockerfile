@@ -1,15 +1,21 @@
 FROM bash:latest as builder
 
-# Download the documentation
-ADD https://docs.python.org/3.7/archives/python-3.7.2-docs-html.zip /home
+ARG version=3.8.2
+
+WORKDIR /home
+
+# Build URL of documentation archive and download it
+# https://docs.python.org/3.8/archives/python-3.8.2-docs-html.zip
+RUN m_version=$(echo ${version} | sed -r -e 's/^([0-9]+\.[0-9]+)\.[0-9]+/\1/') && \
+    wget -O archive.zip https://docs.python.org/${m_version}/archives/python-${version}-docs-html.zip
 
 # Unpack the documentation
-RUN unzip -q /home/python-3.7.2-docs-html.zip -d /home
+RUN mkdir docs && unzip -q archive.zip -d docs
 
-# Grant read and execute permits to others on python-3.6.8-docs-html directory
-RUN chmod -R o+rx /home/python-3.7.2-docs-html
+# Grant read and execute permits to others on docs directory
+RUN chmod -R o+rx docs
 
-FROM httpd:latest
+FROM httpd:alpine
 
 # Copy the result obtained in builder stage
-COPY --from=builder /home/python-3.7.2-docs-html /usr/local/apache2/htdocs
+COPY --from=builder /home/docs /usr/local/apache2/htdocs
