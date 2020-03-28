@@ -1,6 +1,6 @@
 FROM bash:latest as builder
 
-ARG version=3.8.2
+ARG version=3.6.10
 
 WORKDIR /home
 
