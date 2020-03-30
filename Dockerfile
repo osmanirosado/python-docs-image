@@ -7,10 +7,10 @@ WORKDIR /home
 # Build URL of documentation archive and download it
 # https://docs.python.org/3.8/archives/python-3.8.2-docs-html.zip
 RUN m_version=$(echo ${version} | sed -r -e 's/^([0-9]+\.[0-9]+)\.[0-9]+/\1/') && \
-    wget -O archive.zip https://docs.python.org/${m_version}/archives/python-${version}-docs-html.zip
+    wget https://docs.python.org/${m_version}/archives/python-${version}-docs-html.zip
 
 # Unpack the documentation
-RUN mkdir docs && unzip -q archive.zip -d docs
+RUN unzip -q python-${version}-docs-html.zip && mv python-${version}-docs-html docs
 
 # Grant read and execute permits to others on docs directory
 RUN chmod -R o+rx docs
